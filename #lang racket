@@ -1,0 +1,59 @@
+#lang racket
+(define bst 
+             '( 3 "3"
+                  ( 1 "1"
+                     ()
+                     ( 2 "2" () ())
+                  )
+                  ( 5 "5" () () )
+             )
+) ; just an example of how to store a binary tree with key/value in each node, you may choose some other way
+
+(define (foldBST BST someFunct)
+  ;YOUR CODE HERE
+  ; if in "null node" below a leaf, should call (someFunct '() '() '() '()) 
+  ;   (for tree above, that would be the call for left child of 1, both children of 2, both children of 5)
+  ; otherwise should call (someFunct key value folded-value-from-left-subtree folded-value-from-right-subtree)
+  ; and then return the value returned by the call
+)
+
+(define (addAllKeys k v lfv rfv)
+  (if (null? k) ; no need to check if v,lfv,rfv are also '(); if k is '(), it must have been a call (addAllKeys '() '() '() '())
+      0 ; if called with null node, return 0
+      (+ k lfv rfv) ; otherwise, add node's key to left-fold-value (sum of keys from left subtree) and right-fold-value (sum of keys from right subtree))
+  )
+)
+(define (minimumKey k v lfv rfv)
+  (if (null? k)
+      '()
+      (if (null? lfv)
+          k
+          lfv
+      )
+  )
+)
+(define (flattenTree k v lfv rfv)
+  (if (null? k)
+      '()
+      (append lfv (list k v)  rfv)
+  )
+)
+(define (concatStringValuesPreOrder k v lfv rfv)
+  (if (null? k)
+      ""
+      (string-append v lfv rfv)
+  )
+)
+(define (concatStringValuesInOrder k v lfv rfv)
+  (if (null? k)
+      ""
+      (string-append lfv v rfv)
+  )
+)
+
+
+(foldBST bst addAllKeys ) ; should return: 11
+(foldBST bst minimumKey ) ; should return: 1
+(foldBST bst flattenTree ) ; should return: '(1 "1" 2 "2" 3 "3" 5 "5")
+(foldBST bst concatStringValuesPreOrder ) ; should return: "3125"
+(foldBST bst concatStringValuesInOrder ) ; should return: "1235"
